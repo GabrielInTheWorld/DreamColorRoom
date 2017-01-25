@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 
@@ -39,8 +39,18 @@ function onError(event){
 	alert("Error occurred: ", event.data);
 }
 
+function clearText(element){
+	// console.log("call clear function");
+	element.value = "";
+}
+
 function start(){
-	var text = document.getElementById("userInput").value;
+	var textArea = document.getElementById("userInput");
+	var text = textArea.value;
+	textArea.value = "";
+	// console.log("clear textArea");
+	clearText(textArea);
 	webSocket.send(text);
+//	webSocket.send("nothing");
 	return false;
 }
