@@ -34,13 +34,13 @@ function onMessage(message){
 	console.log("json in onMessage: ", json);
 	if(json != null){
 		if(json.type == "chat"){
-			document.getElementById("messages").innerHTML += json.username + ": " + json.message + "<br/>";
+			document.getElementById("chatBox").innerHTML += json.username + ": " + json.message + "<br/>";
 		}
 	}
 }
 
 function onOpen(event){
-	document.getElementById("messages").innerHTML += "Connection established <br/>";
+	document.getElementById("chatBox").innerHTML += "Connection established <br/>";
 }
 
 function onError(event){

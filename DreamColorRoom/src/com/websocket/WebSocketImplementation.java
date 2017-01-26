@@ -64,12 +64,14 @@ public class WebSocketImplementation {
 				// iterator.next().getBasicRemote().sendObject(buildJsonData(username,
 				// messageNode.getMessage()));
 				// }
-			} else {
-				// while (iterator.hasNext()) {
-				// iterator.next().getBasicRemote().sendObject(buildJsonData(username,
-				// messageNode.getMessage()));
-				// }
 			}
+			// else {
+			// // while (iterator.hasNext()) {
+			// //
+			// iterator.next().getBasicRemote().sendObject(buildJsonData(username,
+			// // messageNode.getMessage()));
+			// // }
+			// }
 			System.out.println("send object data: " + buildJsonData(username, messageNode.getMessage()));
 			while (iterator.hasNext()) {
 				iterator.next().getBasicRemote().sendObject(buildJsonData(username, messageNode.getMessage()));

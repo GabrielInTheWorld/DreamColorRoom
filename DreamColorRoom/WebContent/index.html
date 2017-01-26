@@ -9,9 +9,29 @@
 <body>
 	<div id="chatContainer">
 		<textarea class="stapleContainer" rows="10" cols="30" id="userInput" placeholder="Schreib etwas..." ></textarea>
-        <input class="stapleContainer" type="text" placeholder="Dein Name?..." id="userName"/>
+    <input class="stapleContainer" type="text" placeholder="Dein Name?..." id="userName"/>
 		<input class="stapleContainer" type="submit" value="Sende Nachricht" onclick="start()" />
-	</div>
-	<div id="messages"></div>
+		<div class="stapleContainer" id="chatBox"></div>
+  </div>
+
+  <div id="canvasContainer">
+  	<div class="buttonGroup">
+      <button type="button" id="line"></button>
+      <button type="button" id="rect"></button>
+      <button type="button" id="circle"></button>
+      <button type="button" id="polygon"></button>
+      <button type="button" id="freeHand"></button>
+      <button type="button" id="clear"></button>
+    </div>
+  	<canvas id="canvas" width="600" height="400"/>
+  </div>
+  
+  <div id="historyContainer">
+  	<div class="buttonGroup">
+    	<button type="button" id="deleteOne"></button>
+        <button type="button" id="deleteAll"></button>
+    </div>
+    <div id="history"></div>
+  </div>
 </body>
 </html>

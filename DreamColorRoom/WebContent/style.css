@@ -1,7 +1,21 @@
 @CHARSET "ISO-8859-1";
 
 #chatContainer{
+	float: left;
 	width: 20%;
+}
+
+#canvasContainer{
+	float: left;
+	width: 45%;
+	margin: 5px;
+	padding-left: 5%;
+}
+
+#historyContainer{
+	float: left;
+	width: 25%;
+	margin: 5px;
 }
 
 .leftStyle{
@@ -20,10 +34,19 @@
 	overflow-x: hidden;
 }
 
+#chatBox{
+	overflow-y: auto;
+	overflow-x: hidden;
+	/*width: 20%;*/
+	height: 500px;
+
+	border: 1px solid #CCC;
+}
+
 textarea, input[type=text]{
 	/*width: 60%;*/
 	/*float: right;*/
-	padding: 6px 12px;
+	/*padding: 6px 12px;*/
 	font-size: 14px;
 	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 	line-height: 1.4;
@@ -41,4 +64,52 @@ textarea:focus, textarea:active{
 	outline: 0;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, .6);
 	-webkit-box-shadow:  inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+.buttonGroup{
+
+}
+
+button{
+	cursor: pointer;
+	width: 64px;
+	height: 54px;
+	background-repeat: no-repeat;
+	background-color: #FFF;
+	background-position: 50%;
+}
+
+button:hover{
+	background-color: #CCC;
+}
+
+#line{
+	background-image: url("./images/line_transparent.png");
+}
+
+#rect{
+	background-image: url("./images/rectangle_transparent.png");
+}
+
+#circle{
+	background-image: url("./images/circle_transparent.png");
+}
+
+#polygon{
+	background-image: url("./images/polygon_transparent.png");
+}
+
+#freeHand{
+	background-image: url("./images/freeHand_transparent.png");
+}
+
+#canvas{
+	margin-top: 5px;
+	border: 1px solid #CCC;
+}
+
+#history{
+	border: 1px solid #CCC;
+	height: 500px;
+	width: 100%;
 }
