@@ -27,30 +27,41 @@ webSocket.onmessage = function(event){
 	onMessage(event);
 }
 
-function onMessage(event){
-	document.getElementById("messages").innerHTML += "<br/>" + event.data;
+function onMessage(message){
+	console.log("data: ", message.data);
+	// document.getElementById("messages").innerHTML += "<br/>" + event.data;
+	var json = JSON.parse(message.data);
+	console.log("json in onMessage: ", json);
+	if(json != null){
+		if(json.type == "chat"){
+			document.getElementById("messages").innerHTML += json.username + ": " + json.message + "<br/>";
+		}
+	}
 }
 
 function onOpen(event){
-	document.getElementById("messages").innerHTML += "Connection established";
+	document.getElementById("messages").innerHTML += "Connection established <br/>";
 }
 
 function onError(event){
 	alert("Error occurred: ", event.data);
 }
 
-function clearText(element){
-	// console.log("call clear function");
-	element.value = "";
-}
-
 function start(){
 	var textArea = document.getElementById("userInput");
+	var username = document.getElementById("userName").value;
 	var text = textArea.value;
 	textArea.value = "";
-	// console.log("clear textArea");
-	clearText(textArea);
-	webSocket.send(text);
+
+	// var content = JSON.stringify({"username":username, "message":text}, null, "\t");
+	// var c = JSON.parse(content);
+	var message = JSON.stringify({"type":"chat", "content":{
+		"username":username,
+		"message":text
+	}}, null, "\t");
+	console.log("message", message);
+	// clearText(textArea);
+	webSocket.send(message);
 //	webSocket.send("nothing");
 	return false;
 }

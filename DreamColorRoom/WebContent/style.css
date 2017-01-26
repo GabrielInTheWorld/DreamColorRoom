@@ -1,12 +1,26 @@
 @CHARSET "ISO-8859-1";
 
+#chatContainer{
+	width: 20%;
+}
+
+.leftStyle{
+	float: left;
+}
+
+.stapleContainer{
+	padding: 10px;
+	margin: 5px;
+	width: 100%;
+}
+
 #userInput{
 	resize: none;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
 
-textarea{
+textarea, input[type=text]{
 	/*width: 60%;*/
 	/*float: right;*/
 	padding: 6px 12px;
