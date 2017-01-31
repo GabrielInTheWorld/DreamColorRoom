@@ -83,12 +83,16 @@ button:hover{
 	background-color: #CCC;
 }
 
+button[state = active]{
+	background-color: #08F;
+}
+
 #line{
 	background-image: url("./images/line_transparent.png");
 }
 
 #rect{
-	background-image: url("./images/rectangle_transparent.png");
+	background-image: url("./images/rect_transparent.png");
 }
 
 #circle{
@@ -96,11 +100,23 @@ button:hover{
 }
 
 #polygon{
-	background-image: url("./images/polygon_transparent.png");
+	background-image: url("./images/polygon.png");
 }
 
 #freeHand{
 	background-image: url("./images/freeHand_transparent.png");
+}
+
+#clear{
+	background-image: url("./images/clear_transparent.png");
+}
+
+#deleteOne{
+	background-image: url("./images/delete_button_transparent.png");
+}
+
+#deleteAll{
+	background-image: url("./images/clear_transparent.png");
 }
 
 #canvas{
@@ -111,5 +127,58 @@ button:hover{
 #history{
 	border: 1px solid #CCC;
 	height: 500px;
-	width: 100%;
+	width: 300px;
+	overflow: auto;
+	margin-bottom: 20px;
+	background-color: #FFF;
+}
+
+.historyElement{
+	background-color: #00FF00;
+	border: 1px solid #000;
+}
+
+.historyElement:hover{
+	background-color: #FF0000;
+	cursor: pointer;
+}
+
+.historyElement:focus{
+	background-color: #0066FF;
+}
+
+
+/*
+* CSS for the collapsed polygon element
+*/
+.panel-heading > h4 > a.collapsed:before{
+  position: relative;
+  float: left;
+  content: '';
+  margin-right: 10px;
+  margin-left: 5px;
+  margin-top: 4.5px;
+  border-left: 5px solid #231E64;
+  border-right: 5px solid transparent;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+
+}
+
+.panel-heading > h4 > a:before{
+  position: relative;
+  float: left;
+  content: '';
+  margin-right: 10px;
+  margin-left: 5px;
+  margin-top: 7px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #231E64;
+  border-bottom: 5px solid transparent;
+
+}
+
+.panel-heading > h4 > a:hover{
+  cursor: pointer;
 }
