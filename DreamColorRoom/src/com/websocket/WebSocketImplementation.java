@@ -36,7 +36,7 @@ import com.objects.Rect;
 public class WebSocketImplementation {
 
 	static Set<Session> users = Collections.synchronizedSet(new HashSet<Session>());
-	private static final Map<Integer, Object> history = new HashMap<Integer, Object>();
+	private static final Map<String, Object> history = new HashMap<String, Object>();
 
 	private static int historyCounter = 0;
 
@@ -54,7 +54,7 @@ public class WebSocketImplementation {
 			json = new JSONObject(message);
 			// System.out.println("json object: " + json);
 			type = String.valueOf(json.get("type"));
-			content = String.valueOf(json.get("content"));
+			// content = String.valueOf(json.get("content"));
 			// System.out.println(content);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,6 +63,7 @@ public class WebSocketImplementation {
 		ObjectMapper mapper = new ObjectMapper();
 
 		if ("chat".equals(type)) {
+			content = String.valueOf(json.get("content"));
 			// System.out.println("userInput: " + content);
 
 			MessageNode messageNode = mapper.readValue(content, MessageNode.class);
@@ -85,12 +86,26 @@ public class WebSocketImplementation {
 				iterator.next().getBasicRemote().sendObject(buildJsonData(username, messageNode.getMessage()));
 				// iterator.next().getBasicRemote().sendObject(content);
 			}
+		} else if ("remove".equalsIgnoreCase(type)) {
+			System.out.println(json.get("idToDelete"));
+			history.remove(json.get("idToDelete"));
+			// int id = json.get("id");
+			// history.re
+			while (iterator.hasNext()) {
+				iterator.next().getBasicRemote().sendObject(json);
+			}
+			System.out.println("history after deletion: " + history);
 		} else {
+			content = String.valueOf(json.get("content"));
 			// the implementation of drawing on canvas
 			System.out.println("No chat message: " + message);
+			String id = String.valueOf(json.get("id"));
+			System.out.println("\nid: " + id);
 			// id = String.valueOf(json.get("id"));
 			// history.put(id, content);
-			history.put(historyCounter++, json);
+			json.put("history", true);
+			String historyKey = "historyElement" + historyCounter++;
+			history.put(historyKey, json);
 			System.out.println("put json to history: " + json //
 					+ "\nhistoryCounter: " + historyCounter //
 					+ "\nhistory: " + history //
@@ -99,6 +114,7 @@ public class WebSocketImplementation {
 				System.out.println("type is line: " + content);
 				Line line = mapper.readValue(content, Line.class);
 
+				line.setId(id);
 				line.setType(type);
 				while (iterator.hasNext()) {
 					iterator.next().getBasicRemote().sendObject(buildJsonData(line));
@@ -107,6 +123,7 @@ public class WebSocketImplementation {
 				System.out.println("type is rect: " + content);
 				Rect rect = mapper.readValue(content, Rect.class);
 
+				rect.setId(id);
 				rect.setType(type);
 				while (iterator.hasNext()) {
 					iterator.next().getBasicRemote().sendObject(buildJsonData(rect));
@@ -115,6 +132,7 @@ public class WebSocketImplementation {
 				System.out.println("type is circle: " + content);
 				Circle circle = mapper.readValue(content, Circle.class);
 
+				circle.setId(id);
 				circle.setType(type);
 				while (iterator.hasNext()) {
 					iterator.next().getBasicRemote().sendObject(buildJsonData(circle));
@@ -122,7 +140,7 @@ public class WebSocketImplementation {
 			} else if ("polygon".equalsIgnoreCase(type)) {
 				System.out.println("type is polygon: " + content);
 				JSONObject polygonObject = json.getJSONObject("content");
-				JSONArray array = polygonObject.getJSONArray("polygonPoints");
+				JSONArray array = polygonObject.getJSONArray("content");
 				System.out.println("polygonPoints: " + array);
 
 				List<Point> polygonPoints = new ArrayList<>();
@@ -135,6 +153,7 @@ public class WebSocketImplementation {
 
 				Polygon polygon = new Polygon(polygonPoints);
 
+				polygon.setId(id);
 				polygon.setType(type);
 				try {
 					while (iterator.hasNext()) {
@@ -154,10 +173,18 @@ public class WebSocketImplementation {
 	public void onOpen(Session session) {
 		System.out.println("onOpen " + history.size());
 		users.add(session);
-		for (int i = 0; i < history.size(); ++i) {
-			System.out.println("send history: " + history.get(i));
+		// for (int i = 0; i < history.size(); ++i) {
+		// System.out.println("send history: " + history.get(i));
+		// try {
+		// session.getBasicRemote().sendObject(history.get(i));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		for (Map.Entry<String, Object> entry : history.entrySet()) {
+			System.out.println("send history: " + entry.getValue());
 			try {
-				session.getBasicRemote().sendObject(history.get(i));
+				session.getBasicRemote().sendObject(entry.getValue());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -221,6 +248,7 @@ public class WebSocketImplementation {
 		JSONArray array = new JSONArray();
 		JSONObject o = new JSONObject();
 		try {
+			o.put("id", objectToDraw.getId());
 			o.put("type", objectToDraw.getType());
 			for (Point p : list) {
 				JSONObject object = new JSONObject();
@@ -230,6 +258,7 @@ public class WebSocketImplementation {
 				array.put(object);
 				System.out.println("Node: " + object);
 			}
+			// o.put("polygonPoints", array);
 			o.put("content", array);
 			System.out.println("Array: " + array);
 			System.out.println("Object o: " + o);

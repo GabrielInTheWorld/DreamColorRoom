@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Circle {
+	private String id;
 	private int x, y;
 	private float radius, arc;
 	private String type;
@@ -18,6 +19,14 @@ public class Circle {
 		this.y = y;
 		this.radius = radius;
 		this.arc = arc;
+	}
+
+	public String getId() {
+		return this.id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getType() {

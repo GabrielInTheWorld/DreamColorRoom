@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Line {
+	private String id;
 	private String type;
 	private int startX, startY, endX, endY;
 
@@ -17,6 +18,14 @@ public class Line {
 		this.startY = startY;
 		this.endX = endX;
 		this.endY = endY;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getType() {

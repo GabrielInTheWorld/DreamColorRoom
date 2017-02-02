@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class FreeHand {
+	private String id;
 	private String type;
 	private List<Point> freeStylePoints;
 	private int size;
@@ -17,6 +18,14 @@ public class FreeHand {
 			@JsonProperty("size") int size) {
 		this.freeStylePoints = freeStylePoints;
 		this.size = size;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getType() {

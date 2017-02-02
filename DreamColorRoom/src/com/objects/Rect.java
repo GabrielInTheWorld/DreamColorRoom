@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Rect {
+	private String id;
 	private String type;
 	private int x, y, width, height;
 
@@ -17,6 +18,14 @@ public class Rect {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getType() {

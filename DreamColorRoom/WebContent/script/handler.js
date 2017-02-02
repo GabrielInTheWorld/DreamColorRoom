@@ -82,9 +82,15 @@ function onMessage(message){
 		if(json.type == "chat"){
 			document.getElementById("chatBox").innerHTML += json.username + ": " + json.message + "<br/>";
 		}else if(json.history){
-			
+			++idCounter;
+			onDraw(json.content);
+			writeMessage(json.id, json.type, json.content);
+		}else if(json.type == "remove"){
+			getFocus(json.idToDelete);
+			removeFromHistory();
 		}else{
 			onDraw(json);
+			writeMessage(json.id, json.type, json);
 		}
 		// if(json.type == "line"){
 		// 	console.log("line: ", json);
@@ -141,8 +147,8 @@ function writeMessage(id, type, content){
 		// para.appendChild(node);
 		text += "<br/>[points: <br/>";
 		// console.log("polygonPoints.length: ", content.polygonPoints.length);
-		for(var i = 0; i < content.polygonPoints.length; ++i){
-			text += "x: " + content.polygonPoints[i].x + ", y: " + content.polygonPoints[i].y + "<br/>";
+		for(var i = 0; i < content.content.length; ++i){
+			text += "x: " + content.content[i].x + ", y: " + content.content[i].y + "<br/>";
 		}
 		text += "]";
 	}
@@ -152,15 +158,15 @@ function writeMessage(id, type, content){
 	// console.log("para element: ", para);
 	var parent = document.getElementById("history");
 	parent.appendChild(para);
-	if(content.type == "polygon"){console.log("polygonPoints.length: ", content.polygonPoints.length);}
+	if(content.type == "polygon"){console.log("polygonPoints.length: ", content.content.length);}
 	// console.log("from writeMessage: ", content);
 	if(!(type == "polygon")){
 		// console.log("not the type of polygon");
 		toHistory(id, content);
 	}else{
 		var polygonPoints = [];
-		for(var i = 0; i < content.polygonPoints.length; ++i){
-			var point = content.polygonPoints[i];
+		for(var i = 0; i < content.content.length; ++i){
+			var point = content.content[i];
 			var p = {
 				"x": point.x,
 				"y": point.y
@@ -211,17 +217,39 @@ function clearHistory(){
 }
 
 function toHistory(id, content){
-	// console.log("toHistory is called: ", content);
+	console.log("toHistory is called: ", historyMap.size);
+	console.log("historyMap: ", historyMap);
 	historyMap.set(id, content);
 }
 
+function callRemoving(){
+	var removingObject = {
+		"type": "remove",
+		"idToDelete": idToDelete
+	}
+	webSocket.send(JSON.stringify(removingObject));
+
+	removeFromHistory();
+}
+
 function removeFromHistory(){
+	// if(sending){
+	// 	var removingObject = {
+	// 		"type": "remove",
+	// 		"idToDelete": idToDelete
+	// 	}
+	// }
+	// console.log("removingObject: ", removingObject);
+
 	historyMap.delete(idToDelete);
 
 	var parent = document.getElementById("history");
 	var child = document.getElementById(idToDelete);
 	// console.log("child which will destroyed: ", child);
-	parent.removeChild(child);
+	if(child){
+		parent.removeChild(child);
+	}
+	// webSocket.send(JSON.stringify(removingObject));
 
 	drawFromHistory();
 
@@ -268,7 +296,7 @@ function toDraw(content){
 	// console.log("toDraw content: ", content);
 	var id = "historyElement" + idCounter++;
 	var message = JSON.stringify({"id":id, "type":type, "content":content}, null, "\t");
-	writeMessage(id, type, content);
+	// writeMessage(id, type, content);
 	webSocket.send(message);
 }
 
@@ -366,7 +394,7 @@ function addAction(){
 			// console.log("type is polygon");
 			var content = {
 				"type": type,
-				"polygonPoints": polygonPoints
+				"content": polygonPoints
 			}
 			// console.log("content is: ", content);
 			toDraw(content);
@@ -434,10 +462,7 @@ function onDraw(content, sending){
 			console.log("content for drawing polygon: ", content);
 			context.beginPath();
 			context.moveTo(content.content[0].x, content.content[0].y);
-			// context.lineTo(polygonPoints[1].x, polygonPoints[1].y);
-			// context.lineTo(polygonPoints[2].x, polygonPoints[2].y);
-			// context.lineTo(polygonPoints[3].x, polygonPoints[3].y);
-			// context.lineTo(polygonPoints[4].x, polygonPoints[4].y);
+
 			for(var i = 1; i < content.content.length; ++i){
 				// console.log("points: ", content.content[i]);
 				context.lineTo(content.content[i].x, content.content[i].y);
@@ -446,15 +471,7 @@ function onDraw(content, sending){
 			context.stroke();
 
 			loadImage();
-			// writeMessage(theType, content);
-			// if(sending){
-			// 	var newContent = {
-			// 		"type": theType,
-			// 		"polygonPoints": polygonPoints
-			// 	};
-			// 	toDraw(newContent);
-			// }
-			// console.log("polygonPoints.pop()");
+
 			while(polygonPoints.length > 0){
 				polygonPoints.pop();
 			}
@@ -500,6 +517,10 @@ function getMousePos(canvas, event){
 
 function getFocus(elementID){
 	// console.log("elementID: ", elementID);
-	document.getElementById(elementID).focus();
+	var element = document.getElementById(elementID);
+	// document.getElementById(elementID).focus();
+	if(element){
+		element.focus();
+	}
 	idToDelete = elementID;
 }
