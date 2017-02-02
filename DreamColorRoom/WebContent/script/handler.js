@@ -6,7 +6,10 @@ var idToDelete = null;
 
 var canvas = null;
 var context = null;
-// var context = canvas.getContext("2d");
+
+var previewCanvas = null;
+var previewContext = null;
+
 var pointer;
 var isPressing = false;
 
@@ -54,22 +57,20 @@ webSocket.onmessage = function(event){
 
 function init(){
 	console.log("init() is called");
+
 	canvas = document.getElementById("canvas");
-	// i = 0;
-	// console.log("call function init(): ", canvas);
+	previewCanvas = document.getElementById("previewCanvas");
+
 	addAction();
 	context = canvas.getContext('2d');
+	previewContext = previewCanvas.getContext('2d');
 
 	var buttons = document.getElementsByClassName("canvasButton");
-	// console.log("all buttons for canvas: ", buttons);
 	for(var i = 0; i < buttons.length; ++i){
 		buttons[i].setAttribute("state", "notActive");
 	}
-	// console.log("buttons after for-loop: ", buttons);
 	var lineButton = document.getElementById("line");
-	// console.log("button for drawing the line: ", lineButton);
 	lineButton.setAttribute("state", "active");
-	// console.log("lineButton after setting an attribute: ", lineButton);
 }
 
 function onMessage(message){
@@ -92,18 +93,7 @@ function onMessage(message){
 			onDraw(json);
 			writeMessage(json.id, json.type, json);
 		}
-		// if(json.type == "line"){
-		// 	console.log("line: ", json);
-		// 	onDraw(json);
-		// }else if(json.type == "rect"){
-		// 	console.log("rect: ", json);
-		// }else if(json.type == "circle"){
-		// 	console.log("circle: ", json);
-		// }else if(json.type == "polygon"){
-		// 	console.log("polygon: ", json);
-		// }else if(json.type == "freeHand"){
-		// 	console.log("freeHand: ", json);
-		// }
+
 	}else{
 		console.log("message is empty.");
 	}
@@ -302,8 +292,8 @@ function toDraw(content){
 
 function addAction(){
 	// console.log("add action: ", canvas);
-	canvas.addEventListener("mousemove", function(event){
-		var mousePos = getMousePos(canvas, event);
+	previewCanvas.addEventListener("mousemove", function(event){
+		var mousePos = getMousePos(previewCanvas, event);
 		if(isPressing && type == "freeHand"){
 			this.style.cursor = "pointer";
 			var content = {
@@ -313,22 +303,29 @@ function addAction(){
 			};
 			onDraw(content, true);
 			// toDraw(content);
+		}else if(isPressing){
+			this.style.cursor = "pointer";
+			onPreviewDraw(type, pointer, mousePos);
 		}
 	}, false);
 
-	canvas.addEventListener("mousedown", function(event){
+	previewCanvas.addEventListener("mousedown", function(event){
 		isPressing = true;
-		pointer = getMousePos(canvas, event);
-		var p = getMousePos(canvas, event);
+		pointer = getMousePos(previewCanvas, event);
+		var p = getMousePos(previewCanvas, event);
 
 		if(type == "polygon"){
 			polygonPoints.push(p);
 		}
 	}, false);
 
-	canvas.addEventListener("mouseup", function(event){
+	previewCanvas.addEventListener("mouseup", function(event){
 		isPressing = false;
-		var pointer2 = getMousePos(canvas, event);
+		this.style.cursor = "default";
+
+		clearPreviewDraw();
+
+		var pointer2 = getMousePos(previewCanvas, event);
 
 		x = pointer.x;
 		y = pointer.y;
@@ -400,6 +397,34 @@ function addAction(){
 			toDraw(content);
 		}
 	}, false);
+}
+
+function onPreviewDraw(type, positionOne, currentPos){
+	previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+	previewContext.strokeStyle = "#66AFE9";
+	if(type == "line"){
+		previewContext.beginPath();
+		previewContext.moveTo(positionOne.x, positionOne.y);
+		previewContext.lineTo(currentPos.x, currentPos.y);
+		previewContext.closePath();
+		previewContext.stroke();
+	}else if(type == "rect"){
+		var width = currentPos.x - positionOne.x;
+		var height = currentPos.y - positionOne.y;
+
+		previewContext.strokeRect(positionOne.x, positionOne.y, width, height);
+	}else if(type == "circle"){
+		var radius = Math.sqrt(Math.pow((currentPos.x - positionOne.x), 2) + Math.pow((currentPos.y - positionOne.y), 2));
+
+		previewContext.beginPath();
+		previewContext.arc(positionOne.x, positionOne.y, radius, 0, 2 * Math.PI);
+		previewContext.closePath();
+		previewContext.stroke();
+	}
+}
+
+function clearPreviewDraw(){
+	previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
 }
 
 // main function "onDraw"

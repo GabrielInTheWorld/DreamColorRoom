@@ -6,6 +6,7 @@
 }
 
 #canvasContainer{
+	position: relative;
 	float: left;
 	width: 45%;
 	margin: 5px;
@@ -120,6 +121,13 @@ button[state = active]{
 }
 
 #canvas{
+	position: absolute;
+	margin-top: 5px;
+	border: 1px solid #CCC;
+}
+
+#previewCanvas{
+	position: absolute;
 	margin-top: 5px;
 	border: 1px solid #CCC;
 }
