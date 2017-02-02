@@ -53,6 +53,7 @@ webSocket.onmessage = function(event){
 */
 
 function init(){
+	console.log("init() is called");
 	canvas = document.getElementById("canvas");
 	// i = 0;
 	// console.log("call function init(): ", canvas);
@@ -72,6 +73,7 @@ function init(){
 }
 
 function onMessage(message){
+	console.log("onMessage() is called");
 	// console.log("data: ", message.data);
 	// document.getElementById("messages").innerHTML += "<br/>" + event.data;
 	var json = JSON.parse(message.data);
@@ -79,6 +81,8 @@ function onMessage(message){
 	if(json != null){
 		if(json.type == "chat"){
 			document.getElementById("chatBox").innerHTML += json.username + ": " + json.message + "<br/>";
+		}else if(json.history){
+			
 		}else{
 			onDraw(json);
 		}
@@ -100,6 +104,8 @@ function onMessage(message){
 }
 
 function onOpen(event){
+	console.log("onOpen is called");
+	init();
 	document.getElementById("chatBox").innerHTML += "Connection established <br/>";
 }
 
@@ -112,9 +118,9 @@ function onError(event){
 	alert("Error occurred: ", event.data);
 }
 
-function writeMessage(type, content){
+function writeMessage(id, type, content){
 	// console.log("i: ", idCounter);
-	var id = "historyElement" + idCounter++;
+	// var id = "historyElement" + idCounter++;
 
 	var para = document.createElement("p");
 	para.setAttribute("id", id);
@@ -134,7 +140,7 @@ function writeMessage(type, content){
 		// var node = document.createTextNode(content);
 		// para.appendChild(node);
 		text += "<br/>[points: <br/>";
-		console.log("polygonPoints.length: ", content.polygonPoints.length);
+		// console.log("polygonPoints.length: ", content.polygonPoints.length);
 		for(var i = 0; i < content.polygonPoints.length; ++i){
 			text += "x: " + content.polygonPoints[i].x + ", y: " + content.polygonPoints[i].y + "<br/>";
 		}
@@ -147,9 +153,9 @@ function writeMessage(type, content){
 	var parent = document.getElementById("history");
 	parent.appendChild(para);
 	if(content.type == "polygon"){console.log("polygonPoints.length: ", content.polygonPoints.length);}
-	console.log("from writeMessage: ", content);
+	// console.log("from writeMessage: ", content);
 	if(!(type == "polygon")){
-		console.log("not the type of polygon");
+		// console.log("not the type of polygon");
 		toHistory(id, content);
 	}else{
 		var polygonPoints = [];
@@ -161,7 +167,7 @@ function writeMessage(type, content){
 			}
 			polygonPoints.push(p);
 		}
-		console.log("new polygonPoints: ", polygonPoints);
+		// console.log("new polygonPoints: ", polygonPoints);
 		var newContent = {
 			"type": "polygon",
 			"content": polygonPoints
@@ -205,7 +211,7 @@ function clearHistory(){
 }
 
 function toHistory(id, content){
-	console.log("toHistory is called: ", content);
+	// console.log("toHistory is called: ", content);
 	historyMap.set(id, content);
 }
 
@@ -249,9 +255,9 @@ function getPolygonElement(id, content){
 
 function drawFromHistory(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	console.log("drawFromHistory: ", historyMap);
+	// console.log("drawFromHistory: ", historyMap);
 	historyMap.forEach(function(value, key, map){
-		console.log("value in history: ", value);
+		// console.log("value in history: ", value);
 		// var content = JSON.parse(value);
 		// console.log("value: ", content);
 		onDraw(value, false);
@@ -259,14 +265,15 @@ function drawFromHistory(){
 }
 
 function toDraw(content){
-	console.log("toDraw content: ", content);
-	var message = JSON.stringify({"type":type, "content":content}, null, "\t");
-	writeMessage(type, content);
+	// console.log("toDraw content: ", content);
+	var id = "historyElement" + idCounter++;
+	var message = JSON.stringify({"id":id, "type":type, "content":content}, null, "\t");
+	writeMessage(id, type, content);
 	webSocket.send(message);
 }
 
 function addAction(){
-	console.log("add action: ", canvas);
+	// console.log("add action: ", canvas);
 	canvas.addEventListener("mousemove", function(event){
 		var mousePos = getMousePos(canvas, event);
 		if(isPressing && type == "freeHand"){
@@ -372,7 +379,8 @@ function addAction(){
 // content: the content includes the points to drawing
 // sending: bool if the message to draw came from system or the user who drew
 function onDraw(content, sending){
-	console.log("context: ", context, content);
+	console.log("onDraw() is called: ", content);
+	// console.log("context: ", context, content);
 	var theType = null;
 	if(content.type != null){
 		theType = content.type;
@@ -382,8 +390,8 @@ function onDraw(content, sending){
 
 	// content = JSON.parse(content);
 	if(context && theType){
-		console.log("type: ", theType);
-		console.log("content: ", content);
+		// console.log("type: ", theType);
+		// console.log("content: ", content);
 		if(theType == "line"){
 			context.beginPath();
 			context.moveTo(content.startX, content.startY);
@@ -446,7 +454,7 @@ function onDraw(content, sending){
 			// 	};
 			// 	toDraw(newContent);
 			// }
-			console.log("polygonPoints.pop()");
+			// console.log("polygonPoints.pop()");
 			while(polygonPoints.length > 0){
 				polygonPoints.pop();
 			}

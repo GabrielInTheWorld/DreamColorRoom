@@ -4,9 +4,11 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.EncodeException;
@@ -34,10 +36,14 @@ import com.objects.Rect;
 public class WebSocketImplementation {
 
 	static Set<Session> users = Collections.synchronizedSet(new HashSet<Session>());
+	private static final Map<Integer, Object> history = new HashMap<Integer, Object>();
+
+	private static int historyCounter = 0;
 
 	@OnMessage
 	public void onMessage(String message, Session session)
 			throws JsonParseException, JsonMappingException, IOException, EncodeException, JSONException {
+		// String id = null;
 		String type = null;
 		String content = null;
 		JSONObject json = null;
@@ -46,6 +52,7 @@ public class WebSocketImplementation {
 			System.out.println("received message: " + message);
 			// session.getBasicRemote().sendText("Hello: " + message);
 			json = new JSONObject(message);
+			// System.out.println("json object: " + json);
 			type = String.valueOf(json.get("type"));
 			content = String.valueOf(json.get("content"));
 			// System.out.println(content);
@@ -81,6 +88,13 @@ public class WebSocketImplementation {
 		} else {
 			// the implementation of drawing on canvas
 			System.out.println("No chat message: " + message);
+			// id = String.valueOf(json.get("id"));
+			// history.put(id, content);
+			history.put(historyCounter++, json);
+			System.out.println("put json to history: " + json //
+					+ "\nhistoryCounter: " + historyCounter //
+					+ "\nhistory: " + history //
+					+ "\nsize of history: " + history.size());
 			if ("line".equalsIgnoreCase(type)) {
 				System.out.println("type is line: " + content);
 				Line line = mapper.readValue(content, Line.class);
@@ -138,8 +152,16 @@ public class WebSocketImplementation {
 
 	@OnOpen
 	public void onOpen(Session session) {
-		System.out.println("onOpen");
+		System.out.println("onOpen " + history.size());
 		users.add(session);
+		for (int i = 0; i < history.size(); ++i) {
+			System.out.println("send history: " + history.get(i));
+			try {
+				session.getBasicRemote().sendObject(history.get(i));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@OnClose
