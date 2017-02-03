@@ -181,7 +181,7 @@ button[state = active]{
 	background-color: #FFF;
 }
 
-#saveAsXML{
+#saveToFile{
 	background-position: 50%;
 	background-repeat: no-repeat;
 	background-image: url("./images/saveToFile.png");

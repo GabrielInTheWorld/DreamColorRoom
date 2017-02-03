@@ -471,13 +471,13 @@ function savePicture(){
 	elemToSavePicture.setAttribute("download", "DreamPicture.jpg");
 }
 
-function saveAsXML(){
+function saveToFile(){
 	console.log("begin saving json from map: ", historyMap);
-	var historyToD = JSON.stringify(historyMap);
-	console.log("save: ", historyToD);
-	var dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.parse(historyToD));
-	var elemToDownload = document.getElementById("saveAsXML");
-	console.log("save string: ", dataString);
+	var historyToDownload = JSON.stringify(historyMap);
+	console.log("save: ", historyToDownload);
+	var dataString = "data:text/json;charset=utf-8," + encodeURIComponent(historyToDownload);
+	var elemToDownload = document.getElementById("saveToFile");
+	// console.log("save string: ", dataString);
 	elemToDownload.setAttribute("href", dataString);
 	elemToDownload.setAttribute("download", "History.json");
 }
