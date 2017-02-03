@@ -233,14 +233,6 @@ function callRemoving(){
 }
 
 function removeFromHistory(){
-	// if(sending){
-	// 	var removingObject = {
-	// 		"type": "remove",
-	// 		"idToDelete": idToDelete
-	// 	}
-	// }
-	// console.log("removingObject: ", removingObject);
-
 	historyMap.delete(idToDelete);
 
 	var parent = document.getElementById("history");
@@ -256,30 +248,6 @@ function removeFromHistory(){
 	idToDelete = null;
 	loadImage();
 }
-
-// function getPolygonElement(id, content){
-// 	return(
-// 		"<div class=\"box panel panel-default\">
-// 			<div class=\"panel-heading\">
-// 				<h4 class="panel-title">
-// 					<a class="accordion-toggle collapsed" data-toggle="collapse" data-target={"#" + id}></a>
-// 				</h4>
-// 			</div>
-// 			<div id={id} class="panel-collapse collapse" aria-expanded="false">
-// 				<div class="panel-body">
-// 					{
-// 						// var data = []
-// 						// var points = content.points;
-// 						// for(var i = 0; i < points.length; ++i){
-// 						//
-// 						// }
-// 						content.points
-// 					}
-// 				</div>
-// 			</div>
-// 		</div>
-// 	)
-// }
 
 function drawFromHistory(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
@@ -304,16 +272,7 @@ function addAction(){
 	// console.log("add action: ", canvas);
 	previewCanvas.addEventListener("mousemove", function(event){
 		var mousePos = getMousePos(previewCanvas, event);
-		// if(isPressing && type == "freeHand"){
-		// 	this.style.cursor = "pointer";
-		// 	var content = {
-		// 		"type": "freeHand",
-		// 		"x": mousePos.x,
-		// 		"y": mousePos.y
-		// 	};
-		// 	onDraw(content, true);
-		// 	// toDraw(content);
-		// }else
+
 		if(isPressing){
 			this.style.cursor = "pointer";
 			onPreviewDraw(type, pointer, mousePos);
@@ -370,8 +329,7 @@ function addAction(){
 					pointY = y2;
 					height = y - y2;
 				}
-				// var width = x < x2 ? (x2 - x) : (x - x2);
-				// var height = y < y2 ? (y2 - y) : (y - y2);
+
 				content = {
 					"type": type,
 					"x": pointX,
@@ -388,15 +346,7 @@ function addAction(){
 					"radius": radius
 				};
 			}
-			// else if(type == "freeHand"){
-			// 	content = {
-			// 		"type": type,
-			// 		"x": x,
-			// 		"y": y
-			// 	};
-			// }
-			// content = JSON.parse(content);
-			// onDraw(content, true);
+
 			toDraw(content);
 		}else if(polygonPoints.length == 5){
 			// onDraw(null, true);
@@ -465,10 +415,6 @@ function onDraw(content, sending){
 			context.stroke();
 
 			loadImage();
-			// writeMessage(type, content);
-			// if(sending){
-			// 	toDraw(content);
-			// }
 		}else if(theType == "rect"){
 			var pointX = content.x;
 			var pointY = content.y;
@@ -478,10 +424,6 @@ function onDraw(content, sending){
 			context.strokeRect(pointX, pointY, width, height);
 
 			loadImage();
-			// writeMessage(theType, content);
-			// if(sending){
-			// 	toDraw(content);
-			// }
 		}else if(theType == "circle"){
 			var radius = content.radius;
 
@@ -491,10 +433,6 @@ function onDraw(content, sending){
 			context.stroke();
 
 			loadImage();
-			// writeMessage(theType, content);
-			// if(sending){
-			// 	toDraw(content);
-			// }
 		}else if(theType == "polygon"){
 			console.log("content for drawing polygon: ", content);
 			context.beginPath();
@@ -513,14 +451,6 @@ function onDraw(content, sending){
 				polygonPoints.pop();
 			}
 		}
-		// else if(theType == "freeHand"){
-		// 	context.fillRect(content.x, content.y, 1, 1);
-		//
-		// 	loadImage();
-		// 	// if(sending){
-		// 	// 	toDraw(content);
-		// 	// }
-		// }
 	}
 }
 
