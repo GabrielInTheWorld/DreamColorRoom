@@ -95,6 +95,11 @@ public class WebSocketImplementation {
 				iterator.next().getBasicRemote().sendObject(json);
 			}
 			System.out.println("history after deletion: " + history);
+		} else if ("clearHistory".equalsIgnoreCase(type)) {
+			while (iterator.hasNext()) {
+				iterator.next().getBasicRemote().sendObject(json);
+			}
+			history.clear();
 		} else {
 			content = String.valueOf(json.get("content"));
 			// the implementation of drawing on canvas

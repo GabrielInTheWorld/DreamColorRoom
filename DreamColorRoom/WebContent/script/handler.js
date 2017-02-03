@@ -89,6 +89,8 @@ function onMessage(message){
 		}else if(json.type == "remove"){
 			getFocus(json.idToDelete);
 			removeFromHistory();
+		}else if(json.type == "clearHistory"){
+			clearHistory();
 		}else{
 			onDraw(json);
 			writeMessage(json.id, json.type, json);
@@ -194,9 +196,17 @@ function sendMessage(){
 /**
 * functions for drawing on canvas
 */
+function callToClear(){
+	webSocket.send(JSON.stringify({"type": "clearHistory"}));
+	clearHistory();
+}
+
 function clearHistory(){
 	var parent = document.getElementById("history");
 	historyMap.forEach(function(value, key, historyMap){
+		// console.log("call clearHistory(): ", value, key);
+		// idToDelete = key;
+		// callRemoving();
 		historyMap.delete(key);
 		var child = document.getElementById(key);
 		parent.removeChild(child);
@@ -247,29 +257,29 @@ function removeFromHistory(){
 	loadImage();
 }
 
-function getPolygonElement(id, content){
-	// return(
-	// 	<div class="box panel panel-default">
-	// 		<div class="panel-heading">
-	// 			<h4 class="panel-title">
-	// 				<a class="accordion-toggle collapsed" data-toggle="collapse" data-target={"#" + id}></a>
-	// 			</h4>
-	// 		</div>
-	// 		<div id={id} class="panel-collapse collapse" aria-expanded="false">
-	// 			<div class="panel-body">
-	// 				{
-	// 					// var data = []
-	// 					// var points = content.points;
-	// 					// for(var i = 0; i < points.length; ++i){
-	// 					//
-	// 					// }
-	// 					content.points
-	// 				}
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// )
-}
+// function getPolygonElement(id, content){
+// 	return(
+// 		"<div class=\"box panel panel-default\">
+// 			<div class=\"panel-heading\">
+// 				<h4 class="panel-title">
+// 					<a class="accordion-toggle collapsed" data-toggle="collapse" data-target={"#" + id}></a>
+// 				</h4>
+// 			</div>
+// 			<div id={id} class="panel-collapse collapse" aria-expanded="false">
+// 				<div class="panel-body">
+// 					{
+// 						// var data = []
+// 						// var points = content.points;
+// 						// for(var i = 0; i < points.length; ++i){
+// 						//
+// 						// }
+// 						content.points
+// 					}
+// 				</div>
+// 			</div>
+// 		</div>
+// 	)
+// }
 
 function drawFromHistory(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
@@ -294,16 +304,17 @@ function addAction(){
 	// console.log("add action: ", canvas);
 	previewCanvas.addEventListener("mousemove", function(event){
 		var mousePos = getMousePos(previewCanvas, event);
-		if(isPressing && type == "freeHand"){
-			this.style.cursor = "pointer";
-			var content = {
-				"type": "freeHand",
-				"x": mousePos.x,
-				"y": mousePos.y
-			};
-			onDraw(content, true);
-			// toDraw(content);
-		}else if(isPressing){
+		// if(isPressing && type == "freeHand"){
+		// 	this.style.cursor = "pointer";
+		// 	var content = {
+		// 		"type": "freeHand",
+		// 		"x": mousePos.x,
+		// 		"y": mousePos.y
+		// 	};
+		// 	onDraw(content, true);
+		// 	// toDraw(content);
+		// }else
+		if(isPressing){
 			this.style.cursor = "pointer";
 			onPreviewDraw(type, pointer, mousePos);
 		}
@@ -376,13 +387,14 @@ function addAction(){
 					"y": y,
 					"radius": radius
 				};
-			}else if(type == "freeHand"){
-				content = {
-					"type": type,
-					"x": x,
-					"y": y
-				};
 			}
+			// else if(type == "freeHand"){
+			// 	content = {
+			// 		"type": type,
+			// 		"x": x,
+			// 		"y": y
+			// 	};
+			// }
 			// content = JSON.parse(content);
 			// onDraw(content, true);
 			toDraw(content);
@@ -500,20 +512,44 @@ function onDraw(content, sending){
 			while(polygonPoints.length > 0){
 				polygonPoints.pop();
 			}
-		}else if(theType == "freeHand"){
-			context.fillRect(content.x, content.y, 1, 1);
-
-			loadImage();
-			// if(sending){
-			// 	toDraw(content);
-			// }
 		}
+		// else if(theType == "freeHand"){
+		// 	context.fillRect(content.x, content.y, 1, 1);
+		//
+		// 	loadImage();
+		// 	// if(sending){
+		// 	// 	toDraw(content);
+		// 	// }
+		// }
 	}
 }
+
+/**
+* functions to save data
+*/
 
 function loadImage(){
 	// console.log("called loadImage()");
 	var dataURL = canvas.toDataURL();
+	document.getElementById("createdPicture").src = dataURL;
+}
+
+function savePicture(){
+	var dataURL = canvas.toDataURL();
+	var elemToSavePicture = document.getElementById("savePicture");
+	elemToSavePicture.setAttribute("href", dataURL);
+	elemToSavePicture.setAttribute("download", "DreamPicture.jpg");
+}
+
+function saveAsXML(){
+	console.log("begin saving json from map: ", historyMap);
+	var historyToD = JSON.stringify(historyMap);
+	console.log("save: ", historyToD);
+	var dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.parse(historyToD));
+	var elemToDownload = document.getElementById("saveAsXML");
+	console.log("save string: ", dataString);
+	elemToDownload.setAttribute("href", dataString);
+	elemToDownload.setAttribute("download", "History.json");
 }
 
 // getters & setters

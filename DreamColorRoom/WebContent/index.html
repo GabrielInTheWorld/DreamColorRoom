@@ -7,32 +7,46 @@
 	<script type="text/javascript" src="./script/handler.js"></script>
 </head>
 <body>
-	<div id="chatContainer">
-		<textarea class="stapleContainer" rows="10" cols="30" id="userInput" placeholder="Schreib etwas..." ></textarea>
-    <input class="stapleContainer" type="text" placeholder="Dein Name?..." id="userName"/>
-		<input class="stapleContainer" type="submit" value="Sende Nachricht" onclick="sendMessage()" />
-		<div class="stapleContainer" id="chatBox"></div>
-  </div>
+	<div id="header">
+		Gabriel Meyer, 32222 --- Jan Hubrich, 31724 --- Java's Crypt --- Semesteraufgabe
+	</div>
+	<div class="mainBody">
+		<div id="chatContainer">
+			<textarea class="stapleContainer" rows="10" cols="30" id="userInput" placeholder="Schreib etwas..." ></textarea>
+	    <input class="stapleContainer" type="text" placeholder="Dein Name?..." id="userName"/>
+			<input class="stapleContainer" type="submit" value="Sende Nachricht" onclick="sendMessage()" />
+			<div class="stapleContainer" id="chatBox"></div>
+	  </div>
 
-  <div id="canvasContainer">
-  	<div class="buttonGroup">
-      <button type="button" class="canvasButton" id="line" onclick="setType(this)"></button>
-      <button type="button" class="canvasButton" id="rect" onclick="setType(this)"></button>
-      <button type="button" class="canvasButton" id="circle" onclick="setType(this)"></button>
-      <button type="button" class="canvasButton" id="polygon" onclick="setType(this)"></button>
-      <button type="button" class="canvasButton" id="freeHand" onclick="setType(this)"></button>
-      <button type="button" class="canvasButton" id="clear" onclick="clearHistory()"></button>
-    </div>
-  	<canvas id="canvas" width="600" height="400"></canvas>
-		<canvas id="previewCanvas" width="600" height="400"></canvas>
-  </div>
+	  <div id="canvasContainer">
+	  	<div class="buttonGroup">
+	      <button type="button" class="canvasButton" id="line" onclick="setType(this)"></button>
+	      <button type="button" class="canvasButton" id="rect" onclick="setType(this)"></button>
+	      <button type="button" class="canvasButton" id="circle" onclick="setType(this)"></button>
+	      <button type="button" class="canvasButton" id="polygon" onclick="setType(this)"></button>
+	      <button type="button" class="canvasButton" id="clear" onclick="callToClear()"></button>
+	    </div>
+	  	<canvas id="canvas" width="600" height="400"></canvas>
+			<canvas id="previewCanvas" width="600" height="400"></canvas>
+	  </div>
 
-  <div id="historyContainer">
-  	<div class="buttonGroup">
-    	<button type="button" id="deleteOne" onclick="callRemoving()"></button>
-      <button type="button" id="deleteAll" onclick="clearHistory()"></button>
-    </div>
-    <div id="history"></div>
-  </div>
+	  <div id="historyContainer">
+	  	<div class="buttonGroup">
+	    	<button type="button" id="deleteOne" onclick="callRemoving()"></button>
+	      <button type="button" id="deleteAll" onclick="callToClear()"></button>
+				<a id="saveAsXML" class="typeButton" onclick="saveAsXML()"></a>
+	    </div>
+	    <div id="history"></div>
+	  </div>
+		<div id="createdPictureContainer">
+			<div id="createdPictureBG" class="buttonGroup">
+				<a id="savePicture" class="typeButton" onclick="savePicture()"></a>
+			</div>
+			<img id="createdPicture" width="300" height="250" />
+		</div>
+	</div>
+	<div id="footer">
+
+	</div>
 </body>
 </html>

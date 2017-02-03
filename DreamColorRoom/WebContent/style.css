@@ -1,5 +1,27 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	position: relative;
+	background: linear-gradient(to top, #49BCE6, #231E64);
+}
+
+#header, #footer{
+	width: 100%;
+	height: 64px;
+	text-align: center;
+	background-color: #63C9E9;
+	border: 2px solid #222;
+}
+
+#header{
+	padding-bottom: 10px;
+}
+
+#footer{
+	float: left;
+	padding-top: 10px;
+}
+
 #chatContainer{
 	float: left;
 	width: 20%;
@@ -8,14 +30,21 @@
 #canvasContainer{
 	position: relative;
 	float: left;
-	width: 45%;
+	width: 30%;
 	margin: 5px;
-	padding-left: 5%;
+	padding-left: 3%;
+	padding-right: 3%;
 }
 
 #historyContainer{
 	float: left;
-	width: 25%;
+	width: 20%;
+	margin: 5px;
+}
+
+#createdPictureContainer{
+	float: left;
+	width: 20%;
 	margin: 5px;
 }
 
@@ -39,7 +68,8 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	/*width: 20%;*/
-	height: 500px;
+	height: 350px;
+	background-color: #FFF;
 
 	border: 1px solid #CCC;
 }
@@ -78,6 +108,8 @@ button{
 	background-repeat: no-repeat;
 	background-color: #FFF;
 	background-position: 50%;
+
+	border: 1px solid #CCC;
 }
 
 button:hover{
@@ -104,9 +136,9 @@ button[state = active]{
 	background-image: url("./images/polygon.png");
 }
 
-#freeHand{
+/*#freeHand{
 	background-image: url("./images/freeHand_transparent.png");
-}
+}*/
 
 #clear{
 	background-image: url("./images/clear_transparent.png");
@@ -124,6 +156,7 @@ button[state = active]{
 	position: absolute;
 	margin-top: 5px;
 	border: 1px solid #CCC;
+	background-color: #FFF;
 }
 
 #previewCanvas{
@@ -132,13 +165,34 @@ button[state = active]{
 	border: 1px solid #CCC;
 }
 
+#createdPicture{
+	border: 1px solid #CCC;
+	margin-top: 5px;
+	background-color: #FFF;
+}
+
 #history{
 	border: 1px solid #CCC;
 	height: 500px;
 	width: 300px;
 	overflow: auto;
+	margin-top: 5px;
 	margin-bottom: 20px;
 	background-color: #FFF;
+}
+
+#saveAsXML{
+	background-position: 50%;
+	background-repeat: no-repeat;
+	background-image: url("./images/saveToFile.png");
+}
+
+#savePicture{
+	position: absolute;
+	padding-top: 52px;
+	padding-right: 62px;
+	background-image: url("./images/saveImage_transparent.png");
+	background-repeat: no-repeat;
 }
 
 .historyElement{
@@ -155,38 +209,26 @@ button[state = active]{
 	background-color: #0066FF;
 }
 
-
-/*
-* CSS for the collapsed polygon element
-*/
-.panel-heading > h4 > a.collapsed:before{
-  position: relative;
-  float: left;
-  content: '';
-  margin-right: 10px;
-  margin-left: 5px;
-  margin-top: 4.5px;
-  border-left: 5px solid #231E64;
-  border-right: 5px solid transparent;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-
+.typeButton{
+	/*width: 64px;
+	height: 54px;*/
+	font: bold 11px Arial;
+	text-decoration: none;
+	background-color: #FFF;
+	background-position: 50%;
+	color: #333333;
+	padding-top: 40px;
+	padding-bottom: 0px;
+	padding-right: 64px;
+	border: 1px solid #CCC;
 }
 
-.panel-heading > h4 > a:before{
-  position: relative;
-  float: left;
-  content: '';
-  margin-right: 10px;
-  margin-left: 5px;
-  margin-top: 7px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #231E64;
-  border-bottom: 5px solid transparent;
-
+.typeButton:hover{
+	cursor: pointer;
+	background-color: #CCC;
 }
 
-.panel-heading > h4 > a:hover{
-  cursor: pointer;
+#createdPictureBG{
+	position: relative;
+	height: 54px;
 }
