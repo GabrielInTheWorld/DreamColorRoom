@@ -473,7 +473,13 @@ function savePicture(){
 
 function saveToFile(){
 	console.log("begin saving json from map: ", historyMap);
-	var historyToDownload = JSON.stringify(historyMap);
+	// var historyToDownload = JSON.stringify(historyMap);
+	var historyToDownload = "History: \n";
+	historyMap.forEach(value, key, historyMap){
+		console.log("value in forEach loop: ", value);
+		historyToDownload += value + "\n";
+	}
+
 	console.log("save: ", historyToDownload);
 	var dataString = "data:text/json;charset=utf-8," + encodeURIComponent(historyToDownload);
 	var elemToDownload = document.getElementById("saveToFile");
