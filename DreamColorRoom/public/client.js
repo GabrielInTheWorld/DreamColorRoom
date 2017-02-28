@@ -470,9 +470,11 @@ function saveToFile(){
 	console.log("begin saving json from map: ", historyMap);
 	// var historyToDownload = JSON.stringify(historyMap);
 	var historyToDownload = "History: \n";
+	historyMap.forEach(function(value, key, historyMap){
+			console.log("value in forEach loop: ", value);
+			historyToDownload += JSON.stringify(value) + "\n";
+	})
 	// historyMap.forEach(value, key, historyMap){
-	// 	console.log("value in forEach loop: ", value);
-	// 	historyToDownload += value + "\n";
 	// }
 
 	console.log("save: ", historyToDownload);
