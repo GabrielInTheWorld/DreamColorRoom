@@ -45,6 +45,11 @@ function init(){
     // console.log("on socket - remove: ", data);
     onMessage(data)
   })
+
+	socket.on("clearHistory", function(data){
+		console.log("on socket - clearHistory: ", data);
+		onMessage(data);
+	})
   /**
   * end of functions
   */
