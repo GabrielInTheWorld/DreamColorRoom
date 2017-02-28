@@ -92,21 +92,6 @@ function onMessage(message){
 	}
 }
 
-// function onOpen(event){
-// 	console.log("onOpen is called");
-// 	init();
-// 	document.getElementById("chatBox").innerHTML += "Connection established <br/>";
-// }
-//
-// function onClose(event){
-// 	document.getElementById("chatBox").innerHTML += "Connection lost <br/>";
-// 	document.getElementById("userInput").disabled = "true";
-// }
-//
-// function onError(event){
-// 	alert("Error occurred: ", event.data);
-// }
-
 function writeMessage(id, type, content){
 	// console.log("i: ", idCounter);
 	// var id = "historyElement" + idCounter++;
@@ -166,7 +151,7 @@ function writeMessage(id, type, content){
 }
 
 function sendMessage(){
-  console.log("sendMessage is called");
+  // console.log("sendMessage is called");
 	var textArea = document.getElementById("userInput");
 	var username = document.getElementById("userName").value;
 	var text = textArea.value;
@@ -179,7 +164,7 @@ function sendMessage(){
 		"username":username,
 		"message":text
 	};
-	console.log("message", message);
+	// console.log("message", message);
 	// clearText(textArea);
 	socket.emit("chat", message);
 //	webSocket.send("nothing");
@@ -210,8 +195,8 @@ function clearHistory(){
 }
 
 function toHistory(id, content){
-	console.log("toHistory is called: ", historyMap.size);
-	console.log("historyMap: ", historyMap);
+	// console.log("toHistory is called: ", historyMap.size);
+	// console.log("historyMap: ", historyMap);
 	historyMap.set(id, content);
 }
 
@@ -226,7 +211,7 @@ function callRemoving(){
 }
 
 function removeFromHistory(){
-  console.log("history by removing one object: ", historyMap);
+  // console.log("history by removing one object: ", historyMap);
 	historyMap.delete(idToDelete);
 
 	var parent = document.getElementById("history");
@@ -255,7 +240,7 @@ function drawFromHistory(){
 }
 
 function toDraw(content){
-	console.log("toDraw content: ", content);
+	// console.log("toDraw content: ", content);
 	var id = "historyElement" + idCounter++;
 	var message = {"id":id, "type":type, "content":content};
 	// writeMessage(id, type, content);
@@ -388,7 +373,7 @@ function clearPreviewDraw(){
 // content: the content includes the points to drawing
 // sending: bool if the message to draw came from system or the user who drew
 function onDraw(content){
-	console.log("onDraw() is called: ", content);
+	// console.log("onDraw() is called: ", content);
 	// console.log("context: ", context, content);
 	var theType = null;
 	if(content.type != null){
@@ -467,7 +452,7 @@ function savePicture(){
 }
 
 function saveToFile(){
-	console.log("begin saving json from map: ", historyMap);
+	// console.log("begin saving json from map: ", historyMap);
 	// var historyToDownload = JSON.stringify(historyMap);
 	var historyToDownload = "History: \n";
 	historyMap.forEach(function(value, key, historyMap){
@@ -477,7 +462,7 @@ function saveToFile(){
 	// historyMap.forEach(value, key, historyMap){
 	// }
 
-	console.log("save: ", historyToDownload);
+	// console.log("save: ", historyToDownload);
 	var dataString = "data:text/json;charset=utf-8," + encodeURIComponent(historyToDownload);
 	var elemToDownload = document.getElementById("saveToFile");
 	// console.log("save string: ", dataString);
