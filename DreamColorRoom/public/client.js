@@ -24,25 +24,25 @@ var socket;
 * functions
 */
 function init(){
-	console.log("init() is called");
+	// console.log("init() is called");
   socket = io.connect();
-  console.log("socket: ", socket);
+  // console.log("socket: ", socket);
 
   /**
   * messages receiving from websocket
   */
   socket.on("chat", function(data){
-    console.log("on socket - chat: ", data);
+    // console.log("on socket - chat: ", data);
     onMessage(data);
   })
 
   socket.on("draw", function(data){
-    console.log("on socket - draw: ", data);
+    // console.log("on socket - draw: ", data);
     onMessage(data);
   })
 
   socket.on("remove", function(data){
-    console.log("on socket - remove: ", data);
+    // console.log("on socket - remove: ", data);
     onMessage(data)
   })
   /**
@@ -65,11 +65,11 @@ function init(){
 }
 
 function onMessage(message){
-	console.log("onMessage() is called");
-	console.log("data: ", message);
+	// console.log("onMessage() is called");
+	// console.log("data: ", message);
 	// document.getElementById("messages").innerHTML += "<br/>" + event.data;
 	var json = message;
-	console.log("json in onMessage: ", json);
+	// console.log("json in onMessage: ", json);
 	if(json != null){
 		if(json.type == "chat"){
 			document.getElementById("chatBox").innerHTML += json.username + ": " + json.message + "<br/>";
