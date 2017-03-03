@@ -13,12 +13,13 @@ app.get('/', function(req, res){
   res.sendfile('public/index.html');
 });
 
-//Whenever someone connects this gets executed
+// function executed when a user connects
+// integrated functions executed if someone draws or removes objects respectively clear the canvas
 io.on('connection', function(socket){
   console.log('A user connected');
 
   historyMap.forEach(function(value, key, map){
-    console.log("new connected user: ", value);
+    // console.log("new connected user: ", value);
     socket.emit("draw", value)
   })
   socket.emit("chat", {type: "chat", username: "System", message: "Du bist nun mit dem Server verbunden!"});
@@ -33,17 +34,18 @@ io.on('connection', function(socket){
   })
 
   socket.on("remove", function(data){
-    console.log("command - remove: ", data);
+    console.log("command - remove");
     removeFromHistory(data.idToDelete)
     socket.emit("remove", data)
   })
 
   socket.on("clearHistory", function(data){
-    console.log("command - clearHistory: ", data);
+    console.log("command - clearHistory");
     socket.emit("clearHistory", data)
     clearHistory();
   })
-  //Whenever someone disconnects this piece of code executed
+
+// function executed when a user disconnects
   socket.on('disconnect', function () {
     console.log('A user disconnected');
   });
@@ -56,7 +58,7 @@ http.listen(3000, function(){
 
 function addToHistory(json){
   json.history = "true";
-  console.log("addToHistory - json: ", json);
+  // console.log("addToHistory - json: ", json);
   historyMap.set(json.id, json);
 }
 

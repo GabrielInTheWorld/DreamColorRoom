@@ -47,7 +47,7 @@ function init(){
   })
 
 	socket.on("clearHistory", function(data){
-		console.log("on socket - clearHistory: ", data);
+		// console.log("on socket - clearHistory: ", data);
 		onMessage(data);
 	})
   /**
@@ -419,7 +419,7 @@ function onDraw(content){
 
 			loadImage();
 		}else if(theType == "polygon"){
-			console.log("content for drawing polygon: ", content);
+			// console.log("content for drawing polygon: ", content);
 			context.beginPath();
 			context.moveTo(content.content[0].x, content.content[0].y);
 
@@ -461,7 +461,7 @@ function saveToFile(){
 	// var historyToDownload = JSON.stringify(historyMap);
 	var historyToDownload = "History: \n";
 	historyMap.forEach(function(value, key, historyMap){
-			console.log("value in forEach loop: ", value);
+			// console.log("value in forEach loop: ", value);
 			historyToDownload += JSON.stringify(value) + "\n";
 	})
 	// historyMap.forEach(value, key, historyMap){
